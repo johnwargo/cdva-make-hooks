@@ -1,0 +1,29 @@
+{
+  "name": "cdva-hooks",
+  "version": "0.0.3",
+  "description": "Automates the creation of the Cordova Hooks folders",
+  "keywords": [
+    "Cordova",
+    "hooks"
+  ],
+  "author": {
+    "name": "John M. Wargo",
+    "email": "john@johnwargo.com",
+    "url": "http://www.johnwargo.com/"
+  },
+  "license": "Apache-2.0",
+  "main": "cordova-make-hooks.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "cdvahooks": "cordova-make-hooks.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnwargo/make-hooks"
+  },
+  "dependencies": {
+    "colors": "^0.6.2"
+  }
+}
