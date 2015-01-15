@@ -7,6 +7,9 @@
 //
 // by John M. Wargo (www.johnwargo.com)
 //========================================================================
+
+"use strict";
+
 var colors = require('colors'),
   fs = require('fs'),
   path = require('path');
@@ -17,21 +20,14 @@ var colors = require('colors'),
 var theStars = "**************";
 var hooksFolder = 'hooks';
 //The supported before/after hooks folders
-var theHooks = ['build', 'compile', 'docs', 'emulate', 'platform_add', 'platform_rm', 'platform_ls', 'plugin_add', 'plugin_ls', 'plugin_rm', 'plugin_search', 'prepare', 'run', 'serve'];
+//var theHooks = ['build', 'compile', 'docs', 'emulate', 'platform_add', 'platform_rm', 'platform_ls', 'plugin_add', 'plugin_ls', 'plugin_rm', 'plugin_search', 'prepare', 'run', 'serve'];
+var theHooks = ['build', 'compile', 'docs', 'emulate', 'platform_add', 'platform_rm', 'platform_ls', 'plugin_add', 'plugin_ls', 'plugin_rm', 'plugin_search', 'plugin_install', 'plugin_uninstall', 'prepare', 'run', 'serve'];
 //The supported Windows Phone-only hooks folder(s)
 var winHooks = ['pre_package'];
 
 var i;
 //Used to store the list of all folders that will be created
 var folderList = [];
-
-//function listArray(theName, theArray) {
-//  //Write the contents of an array to the console
-//  console.log("\n%s Array Contents", theName);
-//  for (i = 0; i < theArray.length; i++) {
-//    console.log("%s[%s]: '%s'", theName, i, theArray[i]);
-//  }
-//}
 
 function showHelp() {
   //read the help file
