@@ -18,12 +18,16 @@ var colors = require('colors'),
 //some constants
 //*************************************
 var theStars = "**************";
+//Where we want the hooks created
 var hooksFolder = 'hooks';
+//The array containing the hooks that aren't implemented. Sigh.
+var skipHooks = ['after_plugin_uninstall'];
 //The supported before/after hooks folders
-//var theHooks = ['build', 'compile', 'docs', 'emulate', 'platform_add', 'platform_rm', 'platform_ls', 'plugin_add', 'plugin_ls', 'plugin_rm', 'plugin_search', 'prepare', 'run', 'serve'];
 var theHooks = ['build', 'compile', 'docs', 'emulate', 'platform_add', 'platform_rm', 'platform_ls', 'plugin_add', 'plugin_ls', 'plugin_rm', 'plugin_search', 'plugin_install', 'plugin_uninstall', 'prepare', 'run', 'serve'];
-//The supported Windows Phone-only hooks folder(s)
-var winHooks = ['pre_package'];
+//The supported Windows Phone-only hooks folder(s), 
+//this list exists to deal with windows-specific hooks that don't implement 
+//after & before versions of this/these hooks. I'm calling them...orphans.
+var orphanHooks = ['pre_package'];
 
 var i;
 //Used to store the list of all folders that will be created
@@ -89,34 +93,35 @@ if (userArgs.length < 1) {
 var doAll = checkValue(userArgs, '-all');
 var doList = checkValue(userArgs, '-l');
 
-//Do we have switches?
-if (doAll || doList) {
+//========================================================================
+//Are we just displaying a list of hooks?
+//========================================================================
+if (doList) {
+  //The folder list is just the hooks list plus  the orphan hooks
+  folderList = theHooks.concat(orphanHooks);
+  console.log('Available hooks:\n\n%s', folderList.sort().join('\n'));
+  //and exit
+  process.exit(1);
+}
+
+//Now we know we're not listing hooks, but actually making folders,
+//So process the list of hooks
+if (doAll) {
+  //Tell the user what we're doing
+  console.log('Processing all folders\n');
   //Then use all of the hooks
   for (i = 0; i < theHooks.length; i++) {
     //Get the hook option
     key = theHooks[i];
-    //For list, we don't want the before and after options
-    if (doList) {
-      folderList.push(key);
-    } else {
-      folderList.push('before_' + key);
-      folderList.push('after_' + key);
-    }
+    folderList.push('before_' + key);
+    folderList.push('after_' + key);
   }
-  //Now add the windows hooks to the list
-  folderList.push.apply(folderList, winHooks);
-  //Are we only displaying the folder list?
-  if (doList) {
-    //Then display the folder list
-    console.log('Available hooks:\n\n%s', folderList.sort().join('\n'));
-    //and exit
-    process.exit(1);
-  } else {
-    //Tell the user what we're doing
-    console.log('Processing all folders\n');
-  }
+  //Now add the orphan hooks to the list  
+  folderList = folderList.concat(orphanHooks);
 } else {
   //Only processing a subset of the hooks list
+  //Tell the user what we're doing
+  console.log('Processing command parameters\n');
   //Compare the argument list to the possible Hooks and build the
   //folder list from there.
   for (i = 0; i < userArgs.length; i++) {
@@ -136,16 +141,27 @@ if (doAll || doList) {
     //Get the current argument
     var key = userArgs[i];
     //Is the argument in the windows hooks list?
-    if (checkValue(winHooks, key)) {
+    if (checkValue(orphanHooks, key)) {
       //Then append the folder name to the folder list
       folderList.push(key);
     }
   }
 }
 
+//Now make sure all of the skipHook values are removed from the folder list
+//Right now there's only one skiphook, so this code could be easier, 
+//but I wanted to write this in such a way that I don't have to rewrite
+//it when Cordova adds another exception to the list
+for (i = 0; i < skipHooks.length; i++) {
+  var thePos = folderList.indexOf(skipHooks[i]);
+  if (thePos != -1) {
+    folderList.splice(thePos, 1);
+  }
+}
+
 //========================================================================
-//Do we have anything in the folder list? Unlikely that we wouldn't by
-//the time we got here
+//Do we have anything in the folder list? It's unlikely that we wouldn't 
+//by the time we got here
 //========================================================================
 if (folderList.length > 0) {
   //Tell the user what we're going to create
