@@ -1,6 +1,6 @@
 {
   "name": "cdva-hooks",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Automates the creation of the Cordova Hooks folders",
   "keywords": [
     "Cordova",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/johnwargo/make-hooks"
+    "url": "https://github.com/johnwargo/cdva-make-hooks"
   },
   "dependencies": {
     "colors": "^0.6.2"
