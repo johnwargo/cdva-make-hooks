@@ -17,7 +17,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "cdvahooks": "cordova-make-hooks.js"
+    "cdvahook": "cordova-make-hooks.js"
   },
   "repository": {
     "type": "git",

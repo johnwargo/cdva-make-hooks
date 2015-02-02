@@ -1,4 +1,4 @@
-Cordova Hooks (cdvahook)
+Cordova Hooks (cdva-hooks)
 ========================
 Automates the creation of a Cordova project's hooks folders. To install the module, open a terminal window and execute the following command:
 
