@@ -1,5 +1,5 @@
-Cordova Hooks (cdvahook)
-========================
+Cordova Hooks (cdva-hooks)
+==========================
 Automates the creation of a Cordova project's hooks folders. The module accepts the following command-line switches:
 
 -all: Create all folders
@@ -7,25 +7,25 @@ Automates the creation of a Cordova project's hooks folders. The module accepts 
 
 Usage:
 
-To display this help file, issue the cdvahook command without any parameters:
+To display this help file, issue the cdva-hooks command without any parameters:
 
-cdvahook
+cdva-hooks
 
 To create all hooks folders, use the following command:
 
-    cdvahook -all
+    cdva-hooks -all
 	
 To list the available hooks options use the following command:
 
-    cdvahook -l
+    cdva-hooks -l
 
 To create folders for specific hooks, specify one or more hooks on the command-line. 
 
-    cdvahook hook_list
+    cdva-hooks hook_list
 
 Example:
 
-    cdvahook platform_add prepare
+    cdva-hooks platform_add prepare
 	
 This will create hooks folders for the 'platform_add' and 'prepare commands'. Since both of those have before and after options, the command will create the following folders:
 
@@ -34,4 +34,4 @@ This will create hooks folders for the 'platform_add' and 'prepare commands'. Si
 * before_prepare
 * after_prepare
 
-The Windows Phone-only hook, 'pre_package', does not have a before or after option, so it will only create one folder.
+Note: The Windows Phone-only hook, 'pre_package', does not have a before or after option, so it will only create one folder.
