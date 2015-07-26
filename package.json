@@ -1,6 +1,6 @@
 {
   "name": "cdva-hooks",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Automates the creation of the Cordova Hooks folders",
   "keywords": [
     "Cordova",
