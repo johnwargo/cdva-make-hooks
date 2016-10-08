@@ -1,18 +1,26 @@
 Cordova Hooks (cdva-hooks)
 ==========================
-Automates the creation of a Cordova project's hooks folders, see [http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html](http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html). Unfortunately, the hooks folder approach was deprecated [http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html#via-hooks-directory-deprecated](http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html#via-hooks-directory-deprecated), but apparently it still works until they remove it completely.
+Automates the creation of a Apache Cordova project's hooks folders. With hooks folders, any executable code placed in the folder is executed at specific points in the Cordova project lifecycle. Developers create separate folders for each event they want to augment with their custom code, and the Cordova CLI automatically takes care of the process. The Cordova hooks folders are placed in a Cordova project folder called `hooks`. For details on the Cordova hooks approach, see [http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html](http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html). 
+
+**Note**: *Unfortunately, the hooks folder approach was deprecated [http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html#via-hooks-directory-deprecated](http://cordova.apache.org/docs/en/dev/guide/appdev/hooks/index.html#via-hooks-directory-deprecated), but apparently it still works until they remove it completely.*  
+
+Installation
+------------
 
 To install the module, open a terminal window and execute the following command:
 
 	npm install -g cdva-hooks 
 
-The module expects to be executed from a Cordova project folder (although it doesn't check to see if it's in a Cordova project folder) and accepts the following command-line switches:
+Usage
+------------
+
+Execute the module by executing the `cdva-hooks` command at a command-line. The module expects to be executed from a Cordova project folder (although it doesn't check to see if it's in a Cordova project folder) and accepts the following command-line switches:
 
 + `-all`: Create all hooks folders
 
 + `-l`: List all hooks options
 
-Usage:
+**Examples:**
 
 To display this modules's help file, issue the `cdva-hooks` command without any parameters:
 
