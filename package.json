@@ -13,6 +13,7 @@
   },
   "license": "Apache-2.0",
   "main": "cordova-make-hooks.js",
+  "preferGlobal": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +25,6 @@
     "url": "https://github.com/johnwargo/cdva-make-hooks"
   },
   "dependencies": {
-    "colors": "^0.6.2"
+    "colors": "^1.1.2"
   }
 }

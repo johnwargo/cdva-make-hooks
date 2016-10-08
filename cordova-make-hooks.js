@@ -78,6 +78,8 @@ if (process.argv[0].toLowerCase() == 'node') {
   userArgs = process.argv.slice(1);
 }
 
+console.dir(userArgs);
+
 //========================================================================
 //Do we have any arguments left?
 //========================================================================
