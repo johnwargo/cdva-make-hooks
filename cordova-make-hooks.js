@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+"use strict";
 //========================================================================
 // make-hooks
 //
@@ -7,9 +7,9 @@
 //
 // by John M. Wargo (www.johnwargo.com)
 //========================================================================
+//todo: check to make sure it's a Cordova project folder before doing anything.
 
-"use strict";
-
+//Node modules used by the app.
 var colors = require('colors');
 var fs = require('fs');
 var path = require('path');
@@ -17,21 +17,23 @@ var path = require('path');
 //*************************************
 //some constants
 //*************************************
-var theStars = "**************";
-//Where we want the hooks created
-var hooksFolder = 'hooks';
-//The array containing the hooks that aren't implemented. Sigh.
-var skipHooks = ['after_plugin_uninstall'];
-//The supported before/after hooks folders
-var theHooks = ['build', 'compile', 'docs', 'emulate', 'platform_add', 'platform_rm', 'platform_ls', 'plugin_add', 'plugin_ls', 'plugin_rm', 'plugin_search', 'plugin_install', 'plugin_uninstall', 'prepare', 'run', 'serve'];
-//The supported Windows Phone-only hooks folder(s), 
-//this list exists to deal with windows-specific hooks that don't implement 
-//after & before versions of this/these hooks. I'm calling them...orphans.
-var orphanHooks = ['pre_package'];
-var debug = true;
+var debug = false;
 var i;
+var theStars = "**********************";
 //Used to store the list of all folders that will be created
 var folderList = [];
+//Where we want the hooks created - the current project's 'hooks' folder
+var hooksFolder = 'hooks';
+//The array containing the hooks that aren't implemented.
+//these will be skipped
+var skipHooks = ['after_plugin_uninstall', 'after_deploy'];
+//The supported before/after hooks folders
+var theHooks = ['build', 'clean', 'compile', 'deploy', 'emulate', 'platform_add', 'platform_rm', 'platform_ls', 'plugin_add', 'plugin_ls', 'plugin_rm', 'plugin_search', 'plugin_install', 'plugin_uninstall', 'prepare', 'run', 'serve'];
+//20161008: Windows-only hooks were deprecated, whacking the code
+//The supported Windows Phone-only hooks folder(s),
+//this list exists to deal with windows-specific hooks that don't implement
+//after & before versions of this/these hooks. I'm calling them...orphans.
+//var orphanHooks = ['pre_package'];
 
 function listArray(theName, theArray) {
   //Write the contents of an array to the console
@@ -39,6 +41,7 @@ function listArray(theName, theArray) {
   for (var i = 0; i < theArray.length; i++) {
     console.log("%s[%s]: '%s'", theName, i, theArray[i]);
   }
+  console.log();
 }
 
 function showHelp() {
@@ -67,16 +70,13 @@ function makeFolder(folderPath) {
 //Write out what we're running
 //========================================================================
 console.log("\n%s".green, theStars);
-console.log("* Make-Hooks *".green);
+console.log("* Cordova Make-Hooks *".green);
 console.log("%s\n".green, theStars);
 
 //========================================================================
 //Sort out the command line arguments
 //========================================================================
 var userArgs;
-console.log('process.argv');
-console.dir(process.argv);
-
 //Is the first item 'node' or does it contain node.exe? Then we're testing!
 //Yes, I could simply look for the word 'node' in the first parameter, but these
 //are two specific cases I found in my testing, so I coded specifically to them.
@@ -116,10 +116,12 @@ var doList = checkValue(userArgs, '-l');
 //Are we just displaying a list of hooks?
 //========================================================================
 if (doList) {
+  //20161008: Windows-only hooks were deprecated, whacking the code
   //The folder list is just the hooks list plus  the orphan hooks
-  folderList = theHooks.concat(orphanHooks);
-  console.log('Available hooks:\n\n%s', folderList.sort().join('\n'));
-  //and exit
+  //folderList = theHooks.concat(orphanHooks);
+  //console.log('Available hooks:\n\n%s', folderList.sort().join('\n'));
+  console.log('Available hooks:\n\n%s', theHooks.sort().join('\n'));
+  //then exit
   process.exit(1);
 }
 
@@ -136,8 +138,9 @@ if (doAll) {
     folderList.push('before_' + key);
     folderList.push('after_' + key);
   }
+  //20161008: Windows-only hooks were deprecated, whacking the code
   //Now add the orphan hooks to the list  
-  folderList = folderList.concat(orphanHooks);
+  //folderList = folderList.concat(orphanHooks);
 } else {
   //Only processing a subset of the hooks list
   //Tell the user what we're doing
@@ -156,22 +159,20 @@ if (doAll) {
       console.log('Skipping invalid hook: %s', key);
     }
   }
+  //20161008: Windows-only hooks were deprecated, whacking the code
   //Do the same thing for the Windows hooks as well
-  for (i = 0; i < userArgs.length; i++) {
-    //Get the current argument
-    key = userArgs[i];
-    //Is the argument in the windows hooks list?
-    if (checkValue(orphanHooks, key)) {
-      //Then append the folder name to the folder list
-      folderList.push(key);
-    }
-  }
+  // for (i = 0; i < userArgs.length; i++) {
+  //   //Get the current argument
+  //   key = userArgs[i];
+  //   //Is the argument in the windows hooks list?
+  //   if (checkValue(orphanHooks, key)) {
+  //     //Then append the folder name to the folder list
+  //     folderList.push(key);
+  //   }
+  // }
 }
 
 //Now make sure all of the skipHook values are removed from the folder list
-//Right now there's only one skiphook, so this code could be easier, 
-//but I wanted to write this in such a way that I don't have to rewrite
-//it when Cordova adds another exception to the list
 for (i = 0; i < skipHooks.length; i++) {
   var thePos = folderList.indexOf(skipHooks[i]);
   if (thePos != -1) {
@@ -180,12 +181,14 @@ for (i = 0; i < skipHooks.length; i++) {
 }
 
 //========================================================================
-//Do we have anything in the folder list? It's unlikely that we wouldn't 
-//by the time we got here
+// Do we have anything in the folder list?
+// It's unlikely that we wouldn't by the time we got here
 //========================================================================
 if (folderList.length > 0) {
-  //Tell the user what we're going to create
-  console.log('Folders: %s\n', folderList.sort().join(', '));
+  if (debug) {
+    //Tell the user what we're going to create
+    console.log('Folders: %s\n', folderList.sort().join(', '));
+  }
   //Get the current folder
   var wrkFolder = process.cwd();
   //First make sure we have a hooks folder
