@@ -27,7 +27,9 @@ Example:
 
     cdva-hooks platform_add prepare
 	
-This will create hooks folders for the 'platform_add' and 'prepare commands'. Since both of those have before and after options, the command will create the following folders:
+This will create hooks folders for the 'platform_add' and 'prepare commands'.
+
+Since both of those expose 'before' and 'after' options, the command will create the following folders:
 
 * before_platform_add
 * after_platform_add

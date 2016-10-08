@@ -10,9 +10,9 @@
 
 "use strict";
 
-var colors = require('colors'),
-  fs = require('fs'),
-  path = require('path');
+var colors = require('colors');
+var fs = require('fs');
+var path = require('path');
 
 //*************************************
 //some constants
@@ -28,10 +28,18 @@ var theHooks = ['build', 'compile', 'docs', 'emulate', 'platform_add', 'platform
 //this list exists to deal with windows-specific hooks that don't implement 
 //after & before versions of this/these hooks. I'm calling them...orphans.
 var orphanHooks = ['pre_package'];
-
+var debug = true;
 var i;
 //Used to store the list of all folders that will be created
 var folderList = [];
+
+function listArray(theName, theArray) {
+  //Write the contents of an array to the console
+  console.log("\n%s Array Contents", theName);
+  for (var i = 0; i < theArray.length; i++) {
+    console.log("%s[%s]: '%s'", theName, i, theArray[i]);
+  }
+}
 
 function showHelp() {
   //read the help file
@@ -66,19 +74,28 @@ console.log("%s\n".green, theStars);
 //Sort out the command line arguments
 //========================================================================
 var userArgs;
-//Is the first item 'node'? then we're testing
-if (process.argv[0].toLowerCase() == 'node') {
+console.log('process.argv');
+console.dir(process.argv);
+
+//Is the first item 'node' or does it contain node.exe? Then we're testing!
+//Yes, I could simply look for the word 'node' in the first parameter, but these
+//are two specific cases I found in my testing, so I coded specifically to them.
+if (process.argv[0].toLowerCase() === 'node' || process.argv[0].indexOf('node.exe') > -1) {
+  //if (process.argv[0].toLowerCase() == 'node') {
   //whack the first two items off of the list of arguments
-  //This removes the node entry as well as the module name
-  //This should only apply during testing
+  //This removes the node entry as well as the cordova-create entry (the
+  //program we're running)
   userArgs = process.argv.slice(2);
 } else {
   //whack the first item off of the list of arguments
-  //This removes just the module name
+  //This removes just the cva-create entry
   userArgs = process.argv.slice(1);
 }
-
-console.dir(userArgs);
+//What's left at this point is just all of the parameters
+//If debug mode is enabled, print all of the parameters to the console
+if (debug) {
+  listArray('Arguments', userArgs);
+}
 
 //========================================================================
 //Do we have any arguments left?
@@ -108,6 +125,7 @@ if (doList) {
 
 //Now we know we're not listing hooks, but actually making folders,
 //So process the list of hooks
+var key;
 if (doAll) {
   //Tell the user what we're doing
   console.log('Processing all folders\n');
@@ -128,7 +146,7 @@ if (doAll) {
   //folder list from there.
   for (i = 0; i < userArgs.length; i++) {
     //Get the current argument
-    var key = userArgs[i];
+    key = userArgs[i];
     //Is the argument in the hooks list?
     if (checkValue(theHooks, key)) {
       //Then append the folder names to the folder list
@@ -141,7 +159,7 @@ if (doAll) {
   //Do the same thing for the Windows hooks as well
   for (i = 0; i < userArgs.length; i++) {
     //Get the current argument
-    var key = userArgs[i];
+    key = userArgs[i];
     //Is the argument in the windows hooks list?
     if (checkValue(orphanHooks, key)) {
       //Then append the folder name to the folder list
