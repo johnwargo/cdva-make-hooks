@@ -80,7 +80,7 @@ function getLastPathItem(thePath, theSep) {
 //========================================================================
 console.log("\n%s".green, theStars);
 console.log("* Cordova Make-Hooks *".green);
-console.log("%s\n".green, theStars);
+console.log("%s".green, theStars);
 
 //========================================================================
 //Sort out the command line arguments
@@ -115,6 +115,20 @@ if (userArgs.length < 1) {
     showHelp();
     process.exit(1);
 }
+
+//Check to see if this is a Cordova project folder
+console.log('Current folder: %s', currFolder);
+//Are we in a Cordova project folder?
+if (isCordovaProjectFolder()) {
+    //Houston, we have a Cordova project folder
+    console.log('Confirmed Cordova project folder');
+    //Get the list of platforms added to the project   
+} else {
+    console.error("This folder is not a Cordova project folder.".red);
+    console.error("\nPlease navigate to a Cordova project folder and try again.");
+    process.exit(1);
+}
+
 
 //========================================================================
 //Do we have -all on the command line?
