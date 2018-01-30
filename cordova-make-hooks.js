@@ -35,7 +35,12 @@ var theHooks = ['build', 'clean', 'compile', 'deploy', 'emulate', 'platform_add'
 //this list exists to deal with windows-specific hooks that don't implement
 //after & before versions of this/these hooks. I'm calling them...orphans.
 //var orphanHooks = ['pre_package'];
+//Get the current folder
+var currFolder = process.cwd();
 
+//===================================================================
+// Used to render an array through the console
+//===================================================================
 function listArray(theName, theArray) {
     //Write the contents of an array to the console
     console.log("\n%s Array Contents", theName);
@@ -50,6 +55,30 @@ function showHelp() {
     var raw = fs.readFileSync(path.join(__dirname, 'help.txt')).toString('utf8');
     //write the contents of the help file to the console
     console.log(raw);
+}
+
+//===================================================================
+// Figure out if this thing 'feels' like a Cordova project folder
+//===================================================================
+function isCordovaProjectFolder() {
+
+    //Validate the file path exists
+    function checkPath(filePath) {
+        //console.log('Checking for %s', filePath);
+        if (fs.existsSync(filePath)) {
+            console.log('Found: %s', filePath);
+            return true;
+        } else {
+            console.log('Missing: %s'.yellow, filePath);
+            return false;
+        }
+    }
+
+    console.log('Validating Cordova project folder contents:');
+    //Do our check of all the required paths
+    //The code will kick out at the first failure
+    return (checkPath(path.join(currFolder, 'config.xml')) && checkPath(path.join(currFolder, 'www')) &&
+        checkPath(path.join(currFolder, 'platforms')));
 }
 
 function checkValue(theArray, theVal) {
@@ -116,7 +145,6 @@ if (userArgs.length < 1) {
     process.exit(1);
 }
 
-//Check to see if this is a Cordova project folder
 console.log('Current folder: %s', currFolder);
 //Are we in a Cordova project folder?
 if (isCordovaProjectFolder()) {
@@ -128,7 +156,6 @@ if (isCordovaProjectFolder()) {
     console.error("\nPlease navigate to a Cordova project folder and try again.");
     process.exit(1);
 }
-
 
 //========================================================================
 //Do we have -all on the command line?
