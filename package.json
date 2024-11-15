@@ -25,6 +25,6 @@
     "url": "https://github.com/johnwargo/cdva-make-hooks"
   },
   "dependencies": {
-    "colors": "^1.1.2"
+    "colors": "^1.4.0"
   }
 }
